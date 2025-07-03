@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: seckill-demo  # 应用名称
+
+  # Thymeleaf 模板配置
+  thymeleaf:
+    cache: false  # 关闭模板缓存，开发时建议关闭
+
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    # Hikari 连接池配置
+    hikari:
+      pool-name: DateHikariCP
+      minimum-idle: 5  # 最小空闲连接
+      idle-timeout: 18000  # 空闲连接超时时间（毫秒）
+      maximum-pool-size: 10  # 最大连接数
+      auto-commit: true  # 自动提交
+      max-lifetime: 180000  # 连接最大存活时间（毫秒）
+      connection-timeout: 30000  # 连接超时时间（毫秒）
+      connection-test-query: SELECT 1  # 连接测试查询
+
+  # Redis 配置
+  data:
+    redis:
+      host: 192.168.232.128
+      port: 6379
+      database: 0
+      timeout: 10000  # 连接超时时间（毫秒）
+      lettuce:
+        pool:
+          max-active: 8  # 最大活跃连接数
+          max-wait: 10000  # 最大等待时间（毫秒）
+          max-idle: 200  # 最大空闲连接
+          min-idle: 5  # 最小空闲连接
+
+  # 静态资源缓存控制
+  web:
+    resources:
+      add-mappings: true
+      static-locations: classpath:/static/  # 静态资源路径
+      cache:
+        cachecontrol:
+          max-age: 3600  # 客户端缓存时间（秒）
+        chain:
+          cache: true
+          enable: true
+          compressed: true  # 启用压缩缓存
+          html-application-cache: true
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*Mapper.xml  # Mapper XML 文件路径
+  type-aliases-package: com.study.seckill.pojo  # 实体类包别名
+
+# 日志配置
+logging:
+  level:
+    root: info  # 全局日志级别
+    com.study.seckill.mapper: debug  # MyBatis Mapper 层 SQL 日志
+    org.springframework.web: debug  # Spring MVC 详细日志
+    org.apache.ibatis: trace  # MyBatis 详细日志
